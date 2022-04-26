@@ -1,0 +1,31 @@
+{
+  "name": "hacker-news-graphql-example-project",
+  "version": "1.0.0",
+  "description": "Hacker news graphql example project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --transpile-only --no-notify --exit-child ./src/index.ts",
+    "generate": "ts-node --transpile-only ./src/schema.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gbellini0/Hacker-news-graphql-example-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gbellini0/Hacker-news-graphql-example-project/issues"
+  },
+  "homepage": "https://github.com/gbellini0/Hacker-news-graphql-example-project#readme",
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "apollo-server": "^3.1.1",
+    "graphql": "^15.5.1",
+    "nexus": "^1.1.0"
+  }
+}
