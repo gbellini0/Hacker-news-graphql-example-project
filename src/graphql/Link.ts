@@ -71,7 +71,7 @@ export const LinkQuery = extendType({
         const count = await context.prisma.link.count({ where });
         const id = `main-feed:${JSON.stringify(args)}`;
 
-        return {
+        return <any>{
           links,
           count,
           id,
@@ -112,12 +112,12 @@ export const FindLinkByIDQuery = extendType({
       args: {
         id: nonNull(idArg()),
       },
-      resolve(parent, args, context, info) {
-        const link = context.prisma.link.findMany({
+      async resolve(parent, args, context, info) {
+        const link = await context.prisma.link.findMany({
           select: { id: true, description: true, url: true },
           where: { id: Number(args.id) },
         });
-        return link;
+        return <any>link;
       },
     });
   },
@@ -165,8 +165,8 @@ export const UpdateLinkMutation = extendType({
         description: nonNull(stringArg()),
         url: nonNull(stringArg()),
       },
-      resolve(parent, args, context) {
-        const updatedLink = context.prisma.link.update({
+      async resolve(parent, args, context) {
+        const updatedLink = await context.prisma.link.update({
           select: { id: true, description: true, url: true },
           where: { id: Number(args.id) },
           data: {
@@ -174,7 +174,7 @@ export const UpdateLinkMutation = extendType({
             url: args.url,
           },
         });
-        return updatedLink;
+        return <any>updatedLink;
       },
     });
   },
@@ -193,7 +193,7 @@ export const DeleteLinkMutation = extendType({
           select: { id: true, description: true, url: true },
           where: { id: Number(args.id) },
         });
-        return deletedLink;
+        return <any>deletedLink;
       },
     });
   },
