@@ -1,6 +1,9 @@
 {
   "name": "hacker-news-graphql-example-project",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.x"
+  },
   "description": "Hacker news graphql example project",
   "main": "index.js",
   "scripts": {
