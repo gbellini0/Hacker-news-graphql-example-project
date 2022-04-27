@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+./prisma/migrations/migration_lock.toml
+
+node_modules
+# Keep environment variables out of version control
+.env
