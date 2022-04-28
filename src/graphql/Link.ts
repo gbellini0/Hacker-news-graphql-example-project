@@ -41,7 +41,8 @@ export const Link = objectType({
 export const LinkQuery = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.list.nonNull.field("feed", {
+    t.nonNull.field("feed", {
+      // 1
       type: "Feed",
       args: {
         filter: stringArg(),
@@ -68,10 +69,11 @@ export const LinkQuery = extendType({
             | undefined,
         });
 
-        const count = await context.prisma.link.count({ where });
-        const id = `main-feed:${JSON.stringify(args)}`;
+        const count = await context.prisma.link.count({ where }); // 2
+        const id = `main-feed:${JSON.stringify(args)}`; // 3
 
-        return <any>{
+        return {
+          // 4
           links,
           count,
           id,
@@ -112,12 +114,11 @@ export const FindLinkByIDQuery = extendType({
       args: {
         id: nonNull(idArg()),
       },
-      async resolve(parent, args, context, info) {
-        const link = await context.prisma.link.findMany({
-          select: { id: true, description: true, url: true },
+      resolve(parent, args, context, info) {
+        const link = context.prisma.link.findUnique({
           where: { id: Number(args.id) },
         });
-        return <any>link;
+        return link;
       },
     });
   },
@@ -165,8 +166,8 @@ export const UpdateLinkMutation = extendType({
         description: nonNull(stringArg()),
         url: nonNull(stringArg()),
       },
-      async resolve(parent, args, context) {
-        const updatedLink = await context.prisma.link.update({
+      resolve(parent, args, context) {
+        const updatedLink = context.prisma.link.update({
           select: { id: true, description: true, url: true },
           where: { id: Number(args.id) },
           data: {
@@ -174,7 +175,7 @@ export const UpdateLinkMutation = extendType({
             url: args.url,
           },
         });
-        return <any>updatedLink;
+        return updatedLink;
       },
     });
   },
@@ -183,7 +184,7 @@ export const UpdateLinkMutation = extendType({
 export const DeleteLinkMutation = extendType({
   type: "Mutation",
   definition(t) {
-    t.nonNull.field("deleteLink", {
+    t.nullable.field("deleteLink", {
       type: "Link",
       args: {
         id: nonNull(idArg()),
@@ -193,7 +194,7 @@ export const DeleteLinkMutation = extendType({
           select: { id: true, description: true, url: true },
           where: { id: Number(args.id) },
         });
-        return <any>deletedLink;
+        return deletedLink;
       },
     });
   },
