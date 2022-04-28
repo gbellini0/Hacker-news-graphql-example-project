@@ -106,24 +106,6 @@ export const Feed = objectType({
   },
 });
 
-export const FindLinkByIDQuery = extendType({
-  type: "Query",
-  definition(t) {
-    t.nonNull.list.nonNull.field("link", {
-      type: "Link",
-      args: {
-        id: nonNull(idArg()),
-      },
-      resolve(parent, args, context, info) {
-        const link = context.prisma.link.findUnique({
-          where: { id: Number(args.id) },
-        });
-        return link;
-      },
-    });
-  },
-});
-
 export const LinkMutation = extendType({
   type: "Mutation",
   definition(t) {
@@ -160,22 +142,26 @@ export const UpdateLinkMutation = extendType({
   type: "Mutation",
   definition(t) {
     t.nonNull.field("updateLink", {
-      type: "Link",
+      type: "Boolean",
       args: {
         id: nonNull(idArg()),
         description: nonNull(stringArg()),
         url: nonNull(stringArg()),
       },
       resolve(parent, args, context) {
-        const updatedLink = context.prisma.link.update({
-          select: { id: true, description: true, url: true },
-          where: { id: Number(args.id) },
-          data: {
-            description: args.description,
-            url: args.url,
-          },
-        });
-        return updatedLink;
+        try {
+          context.prisma.link.update({
+            select: { id: true, description: true, url: true },
+            where: { id: Number(args.id) },
+            data: {
+              description: args.description,
+              url: args.url,
+            },
+          });
+          return true;
+        } catch (err) {
+          throw err;
+        }
       },
     });
   },
@@ -185,16 +171,20 @@ export const DeleteLinkMutation = extendType({
   type: "Mutation",
   definition(t) {
     t.nullable.field("deleteLink", {
-      type: "Link",
+      type: "Boolean",
       args: {
         id: nonNull(idArg()),
       },
       resolve(parent, args, context) {
-        const deletedLink = context.prisma.link.delete({
-          select: { id: true, description: true, url: true },
-          where: { id: Number(args.id) },
-        });
-        return deletedLink;
+        try {
+          context.prisma.link.delete({
+            select: { id: true, description: true, url: true },
+            where: { id: Number(args.id) },
+          });
+          return true;
+        } catch (err) {
+          throw err;
+        }
       },
     });
   },
